@@ -1,7 +1,8 @@
 from enum import Enum
+from htmlnode import LeafNode
 class TextType(Enum):
     """Enum for text types."""
-    NORMAL = "normal"
+    TEXT = "text"
     BOLD = "bold"
     ITALIC = "italic"
     LINK = "link"
@@ -21,3 +22,34 @@ class TextNode():
         if not isinstance(other, TextNode):
             return False
         return self.text == other.text and self.text_type == other.text_type and self.url == other.url
+    
+def text_node_to_html_node(textnode):
+    match textnode.text_type:
+        case TextType.TEXT:
+            return LeafNode(None, textnode.text)
+        case TextType.BOLD:
+            return LeafNode("b", textnode.text)
+        case TextType.ITALIC:
+            return LeafNode("i", textnode.text)
+        case TextType.LINK:
+            if textnode.url is None:
+                raise ValueError("Link text node must have a URL")
+            if textnode.text is None:
+                raise ValueError("Link text node must have text")
+            if textnode.text == "":
+                raise ValueError("Link text node must have non-empty text")
+            if textnode.url == "":
+                raise ValueError("Link text node must have non-empty URL")
+            return LeafNode("a", textnode.text, {"href": textnode.url})
+        case TextType.IMAGE:
+            if textnode.url is None:
+                raise ValueError("Image text node must have a URL")
+            return LeafNode("img", None, {"src": textnode.url})
+        case TextType.CODE:
+            if textnode.text is None:
+                raise ValueError("Code text node must have text")
+            if textnode.text == "":
+                raise ValueError("Code text node must have non-empty text")
+            return LeafNode("code", textnode.text)
+        case _:
+            raise ValueError(f"Unknown text type: {textnode.text_type}")
