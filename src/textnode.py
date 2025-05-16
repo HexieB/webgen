@@ -56,8 +56,14 @@ def text_node_to_html_node(textnode):
             raise ValueError(f"Unknown text type: {textnode.text_type}")
         
 def extract_markdown_images(text: str):
-    """finds image links in raw markdown text using regex. returns a list of tuples alt t ext and then urls"""
+    """finds image links in raw markdown text using regex. returns a list of tuples alt text and then urls"""
     
-    pattern = r"!\[(.*?)\]\((.*?)\)"
+    pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+    matches = re.findall(pattern, text)
+    return [(match[0], match[1]) for match in matches]
+
+def extract_markdown_links(text: str):
+    """finds links in raw markdown text using regex. returns a list of tuples anchor text and then urls"""
+    pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
     matches = re.findall(pattern, text)
     return [(match[0], match[1]) for match in matches]
