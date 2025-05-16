@@ -1,5 +1,6 @@
 from enum import Enum
 from htmlnode import LeafNode
+import re
 class TextType(Enum):
     """Enum for text types."""
     TEXT = "text"
@@ -53,3 +54,10 @@ def text_node_to_html_node(textnode):
             return LeafNode("code", textnode.text)
         case _:
             raise ValueError(f"Unknown text type: {textnode.text_type}")
+        
+def extract_markdown_images(text: str):
+    """finds image links in raw markdown text using regex. returns a list of tuples alt t ext and then urls"""
+    
+    pattern = r"!\[(.*?)\]\((.*?)\)"
+    matches = re.findall(pattern, text)
+    return [(match[0], match[1]) for match in matches]
