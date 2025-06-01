@@ -1,0 +1,2 @@
+This is a reboot of the Static Site generator project on Boot.dev
+I got a little in the weeds on this project, running into issues allowing copilot to write code for me. So I'm restarting this project and sticking to writing the code all on my own in order to strengthen my own skills and increase my knowledge by doing the things that are hard until they become easy.
